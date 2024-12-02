@@ -38,7 +38,7 @@ Analyze the unusual data from the engineers. How many reports are safe?
  */
 
 const isReportValid = (reportData: number[]) => {
-  // mutate input array to get same increasing sort
+  // mutate input array to get same decreasing sort
   if (reportData[0] < reportData[1]) {
     reportData.reverse();
   }
