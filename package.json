@@ -1,0 +1,8 @@
+{
+  "name": "github-contribtuons-builder",
+  "private": true,
+  "version": "0.0.0",
+  "devDependencies": {
+    "@types/node": "^22.10.1"
+  }
+}
