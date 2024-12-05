@@ -11,5 +11,5 @@ Thumbs.db
 
 # not including inputs due to Advent of code request in FAQ
 # https://adventofcode.com/2024/about
-*/input.(txt|ts)
+input.*
 
