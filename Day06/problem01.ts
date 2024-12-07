@@ -1,5 +1,9 @@
 import { input } from "./input";
 
+/**
+ * https://adventofcode.com/2024/day/6
+ */
+
 const maze = input.split("\n").map((rows) => rows.split(""));
 
 let result = 1;
