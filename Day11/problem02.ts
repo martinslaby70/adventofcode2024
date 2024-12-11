@@ -1,42 +1,39 @@
 import { input } from "./input";
 
-let initialStones = input.split(" ").map(BigInt);
-const isEven = (n: number) => n === 0 || !!(n && !(n % 2));
+const stones = input.split(" ").map(Number);
 
 const NUM_OF_BLINKS = 75;
+const isEven = (n: number) => n === 0 || !!(n && !(n % 2));
 
-let stones = new Map<bigint, bigint>();
+type CountArgs = (stone: number, turn: number) => number;
 
-const blink = () => {
-  const newStones = new Map<bigint, bigint>();
-  [...stones.entries()].forEach(([stone, count]) =>
-    updateStone(stone).forEach((newStone) =>
-      newStones.set(newStone, (newStones.get(newStone) ?? 0n) + count)
-    )
-  );
+const memoize = (fn: CountArgs): CountArgs => {
+  const cache = {};
 
-  stones = newStones;
+  return (...args) => {
+    const key = args.join("\n");
+    return cache[key] ?? (cache[key] = fn(...args));
+  };
 };
 
-const updateStone = (item: bigint): bigint[] => {
-  if (item === 0n) return [1n];
+const count = memoize((stone, turn) => {
+  if (turn === 0) return 1;
+  if (stone === 0) return count(1, turn - 1);
 
-  const digits = item.toString().split("");
+  const digits = stone.toString().split("");
+
   if (isEven(digits.length)) {
-    const firstHalf = [...digits].splice(0, digits.length / 2).join("");
-    const secondHalf = [...digits].splice(digits.length / 2).join("");
-
-    return [BigInt(firstHalf), BigInt(secondHalf)];
+    const exp = 10 ** (digits.length / 2);
+    return (
+      count(Math.floor(stone / exp), turn - 1) + count(stone % exp, turn - 1)
+    );
   }
+  return count(stone * 2024, turn - 1);
+});
 
-  return [item * 2024n];
-};
+const result = stones.reduce(
+  (total, current) => total + count(current, NUM_OF_BLINKS),
+  0
+);
 
-input
-  .split(" ")
-  .map(BigInt)
-  .forEach((stone) => stones.set(stone, (stones.get(stone) ?? 0n) + 1n));
-
-Array(25).forEach(blink);
-
-console.log([...stones.values()]);
+console.log(result);
